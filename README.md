@@ -1,4 +1,4 @@
-# Color Tags
+# Text Color Tags
 
 Simple inline text coloring for Obsidian. No markup pollution in your files.
 
