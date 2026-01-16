@@ -104,17 +104,12 @@ module.exports = class ColorTagsPlugin extends Plugin {
             this.app.workspace.on('editor-menu', (menu, editor, view) => {
                 menu.addItem((item) => {
                     item
-                        .setTitle('Format')
-                        .setIcon('brush')
-                        .setSubmenu()
-                        .addItem((subItem) => {
-                            subItem
-                                .setTitle('Text Color')
-                                .setIcon('palette')
-                                .onClick(() => {
-                                    this.showColorPickerForSelection(editor);
-                                });
-                        });
+						.setTitle('Set Color')
+						.setIcon('palette')
+						.onClick(() => {
+							this.showColorPickerForSelection(editor);
+						});
+
                 });
             })
         );
