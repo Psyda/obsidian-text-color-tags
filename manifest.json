@@ -1,7 +1,7 @@
 {
     "id": "text-color-tags",
     "name": "Text Color Tags",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "minAppVersion": "1.0.0",
     "description": "Simple inline text coloring with $red, $#hex syntax. Clickable swatches, color picker, vault presets.",
     "author": "psyda",

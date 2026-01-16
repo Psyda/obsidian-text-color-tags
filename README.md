@@ -17,7 +17,7 @@ $#00ff00 Also works with hash
 - Click swatch → opens color picker
 
 **Right-click menu:**
-- Format → Text Color to add color at cursor or wrap selection
+- Text Color to add color at cursor or wrap selection
 
 ## Features
 
@@ -26,18 +26,18 @@ $#00ff00 Also works with hash
 - **Clickable swatches** with full color picker
 - **8 vault swatches** (configurable in settings)
 - **8 recent colors** auto-tracked
-- **Context menu** integration under Format → Text Color
+- **Context menu** integration
 
 ## Installation
 
 ### From Community Plugins
 1. Open Settings → Community Plugins
-2. Search "Color Tags"
+2. Search "Text Color Tags"
 3. Install and enable
 
 ### Manual
-1. Download `main.js` and `manifest.json`
-2. Create folder: `.obsidian/plugins/color-tags/`
+1. Download `main.js`, `manifest.json`, and `styles.css`
+2. Create folder: `.obsidian/plugins/text-color-tags/`
 3. Place files in folder
 4. Enable in Settings → Community Plugins
 

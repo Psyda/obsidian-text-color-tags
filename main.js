@@ -53,22 +53,10 @@ class ColorSwatchWidget extends WidgetType {
 
     toDOM() {
         const swatch = document.createElement('span');
-        swatch.className = 'color-tag-swatch';
-        
-        const bgColor = this.color || null;
-        const gradient = !this.color ? 'background: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);' : '';
-        
-        swatch.style.cssText = `
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            ${bgColor ? `background-color: ${bgColor};` : gradient}
-            border: 1px solid var(--background-modifier-border);
-            border-radius: 2px;
-            cursor: pointer;
-            vertical-align: middle;
-            margin-right: 3px;
-        `;
+        swatch.className = 'color-tag-swatch' + (this.color ? '' : ' no-color');
+        if (this.color) {
+            swatch.style.backgroundColor = this.color;
+        }
 
         swatch.addEventListener('mousedown', (e) => {
             e.preventDefault();
@@ -99,17 +87,16 @@ module.exports = class ColorTagsPlugin extends Plugin {
 
         this.registerEditorExtension([this.createEditorExtension()]);
 
-        // Add context menu item under Format submenu
+        // Add context menu item
         this.registerEvent(
             this.app.workspace.on('editor-menu', (menu, editor, view) => {
                 menu.addItem((item) => {
                     item
-						.setTitle('Set Color')
-						.setIcon('palette')
-						.onClick(() => {
-							this.showColorPickerForSelection(editor);
-						});
-
+                        .setTitle('Text Color')
+                        .setIcon('palette')
+                        .onClick(() => {
+                            this.showColorPickerForSelection(editor);
+                        });
                 });
             })
         );
@@ -133,43 +120,21 @@ module.exports = class ColorTagsPlugin extends Plugin {
 
         const picker = document.createElement('div');
         picker.className = 'color-tag-picker';
-        picker.style.cssText = `
-            position: fixed;
-            z-index: 10000;
-            background: var(--background-primary);
-            border: 1px solid var(--background-modifier-border);
-            border-radius: 8px;
-            padding: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            width: 244px;
-            box-sizing: border-box;
-        `;
 
         // Color input row
         const colorInputRow = document.createElement('div');
-        colorInputRow.style.cssText = 'margin-bottom: 12px; display: flex; gap: 8px; align-items: center;';
+        colorInputRow.className = 'color-tag-picker-row';
 
         const colorInput = document.createElement('input');
         colorInput.type = 'color';
         colorInput.value = '#e74c3c';
-        colorInput.style.cssText = 'width: 48px; height: 32px; border: none; cursor: pointer; background: none; padding: 0;';
+        colorInput.className = 'color-tag-picker-color-input';
 
         const hexInput = document.createElement('input');
         hexInput.type = 'text';
         hexInput.value = colorInput.value;
         hexInput.placeholder = '#ffffff';
-        hexInput.style.cssText = `
-            flex: 1;
-            min-width: 0;
-            padding: 6px 8px;
-            border: 1px solid var(--background-modifier-border);
-            border-radius: 4px;
-            background: var(--background-secondary);
-            color: var(--text-normal);
-            font-family: var(--font-monospace);
-            font-size: 13px;
-            box-sizing: border-box;
-        `;
+        hexInput.className = 'color-tag-picker-hex-input';
 
         colorInput.addEventListener('input', () => {
             hexInput.value = colorInput.value;
@@ -190,8 +155,8 @@ module.exports = class ColorTagsPlugin extends Plugin {
 
         // Vault swatches
         const vaultLabel = document.createElement('div');
+        vaultLabel.className = 'color-tag-picker-label';
         vaultLabel.textContent = 'Vault Colors';
-        vaultLabel.style.cssText = 'font-size: 11px; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;';
         picker.appendChild(vaultLabel);
 
         const vaultRow = this.createSwatchRow(this.settings.vaultSwatches, (color) => {
@@ -203,8 +168,8 @@ module.exports = class ColorTagsPlugin extends Plugin {
         // Recent colors
         if (this.settings.recentColors.length > 0) {
             const recentLabel = document.createElement('div');
+            recentLabel.className = 'color-tag-picker-label recent';
             recentLabel.textContent = 'Recent';
-            recentLabel.style.cssText = 'font-size: 11px; color: var(--text-muted); margin: 12px 0 6px 0; text-transform: uppercase; letter-spacing: 0.5px;';
             picker.appendChild(recentLabel);
 
             const recentRow = this.createSwatchRow(this.settings.recentColors, (color) => {
@@ -216,18 +181,8 @@ module.exports = class ColorTagsPlugin extends Plugin {
 
         // Apply button
         const applyBtn = document.createElement('button');
+        applyBtn.className = 'color-tag-picker-apply';
         applyBtn.textContent = 'Apply';
-        applyBtn.style.cssText = `
-            width: 100%;
-            margin-top: 12px;
-            padding: 8px 12px;
-            background: var(--interactive-accent);
-            color: var(--text-on-accent);
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 500;
-        `;
         applyBtn.addEventListener('click', () => {
             let newColor = hexInput.value;
             if (!newColor.startsWith('#')) newColor = '#' + newColor;
@@ -302,45 +257,23 @@ module.exports = class ColorTagsPlugin extends Plugin {
 
         const picker = document.createElement('div');
         picker.className = 'color-tag-picker';
-        picker.style.cssText = `
-            position: fixed;
-            z-index: 10000;
-            background: var(--background-primary);
-            border: 1px solid var(--background-modifier-border);
-            border-radius: 8px;
-            padding: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            width: 244px;
-            box-sizing: border-box;
-        `;
 
         const currentColor = this.getColorAtPos(view, pos);
 
         // Color input row
         const colorInputRow = document.createElement('div');
-        colorInputRow.style.cssText = 'margin-bottom: 12px; display: flex; gap: 8px; align-items: center;';
+        colorInputRow.className = 'color-tag-picker-row';
 
         const colorInput = document.createElement('input');
         colorInput.type = 'color';
         colorInput.value = colorToHex(currentColor);
-        colorInput.style.cssText = 'width: 48px; height: 32px; border: none; cursor: pointer; background: none; padding: 0;';
+        colorInput.className = 'color-tag-picker-color-input';
 
         const hexInput = document.createElement('input');
         hexInput.type = 'text';
         hexInput.value = colorInput.value;
         hexInput.placeholder = '#ffffff';
-        hexInput.style.cssText = `
-            flex: 1;
-            min-width: 0;
-            padding: 6px 8px;
-            border: 1px solid var(--background-modifier-border);
-            border-radius: 4px;
-            background: var(--background-secondary);
-            color: var(--text-normal);
-            font-family: var(--font-monospace);
-            font-size: 13px;
-            box-sizing: border-box;
-        `;
+        hexInput.className = 'color-tag-picker-hex-input';
 
         colorInput.addEventListener('input', () => {
             hexInput.value = colorInput.value;
@@ -361,8 +294,8 @@ module.exports = class ColorTagsPlugin extends Plugin {
 
         // Vault swatches
         const vaultLabel = document.createElement('div');
+        vaultLabel.className = 'color-tag-picker-label';
         vaultLabel.textContent = 'Vault Colors';
-        vaultLabel.style.cssText = 'font-size: 11px; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;';
         picker.appendChild(vaultLabel);
 
         const vaultRow = this.createSwatchRow(this.settings.vaultSwatches, (color) => {
@@ -374,8 +307,8 @@ module.exports = class ColorTagsPlugin extends Plugin {
         // Recent colors
         if (this.settings.recentColors.length > 0) {
             const recentLabel = document.createElement('div');
+            recentLabel.className = 'color-tag-picker-label recent';
             recentLabel.textContent = 'Recent';
-            recentLabel.style.cssText = 'font-size: 11px; color: var(--text-muted); margin: 12px 0 6px 0; text-transform: uppercase; letter-spacing: 0.5px;';
             picker.appendChild(recentLabel);
 
             const recentRow = this.createSwatchRow(this.settings.recentColors, (color) => {
@@ -387,18 +320,8 @@ module.exports = class ColorTagsPlugin extends Plugin {
 
         // Apply button
         const applyBtn = document.createElement('button');
+        applyBtn.className = 'color-tag-picker-apply';
         applyBtn.textContent = 'Apply';
-        applyBtn.style.cssText = `
-            width: 100%;
-            margin-top: 12px;
-            padding: 8px 12px;
-            background: var(--interactive-accent);
-            color: var(--text-on-accent);
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 500;
-        `;
         applyBtn.addEventListener('click', () => {
             let newColor = hexInput.value;
             if (!newColor.startsWith('#')) newColor = '#' + newColor;
@@ -430,22 +353,13 @@ module.exports = class ColorTagsPlugin extends Plugin {
 
     createSwatchRow(colors, onClick) {
         const row = document.createElement('div');
-        row.style.cssText = 'display: flex; gap: 6px; flex-wrap: wrap;';
+        row.className = 'color-tag-picker-swatches';
 
         for (const color of colors) {
             const swatch = document.createElement('div');
-            swatch.style.cssText = `
-                width: 22px;
-                height: 22px;
-                background-color: ${color};
-                border: 1px solid var(--background-modifier-border);
-                border-radius: 4px;
-                cursor: pointer;
-                transition: transform 0.1s;
-            `;
+            swatch.className = 'color-tag-picker-swatch';
+            swatch.style.backgroundColor = color;
             swatch.title = color;
-            swatch.addEventListener('mouseenter', () => swatch.style.transform = 'scale(1.1)');
-            swatch.addEventListener('mouseleave', () => swatch.style.transform = 'scale(1)');
             swatch.addEventListener('click', () => onClick(color));
             row.appendChild(swatch);
         }
