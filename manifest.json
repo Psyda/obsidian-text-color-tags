@@ -3,7 +3,7 @@
     "name": "Text Color Tags",
     "version": "2.0.2",
     "minAppVersion": "1.0.0",
-    "description": "Simple inline text coloring with $red, $#hex syntax. Clickable swatches, color picker, vault presets.",
+    "description": "Simple and fast inline text coloring that feels native with $red, $#hex syntax. Clickable swatches, color picker, vault presets.",
     "author": "psyda",
     "authorUrl": "https://github.com/psyda",
     "fundingUrl": "https://paypal.me/mintyfresh",
